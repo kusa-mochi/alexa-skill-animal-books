@@ -5,12 +5,10 @@ const Alexa = require('ask-sdk-core');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'LaunchRequest'
-            || (handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent');
+        return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speechText = 'こんにちは世界。';
+        const speechText = 'アレクサ、赤ちゃん用品のおすすめの商品を教えてと声をかけてください。';
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -18,19 +16,36 @@ const LaunchRequestHandler = {
     },
 };
 
-const HelloWorldIntentHandler = {
+const HelpHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-            && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
+            && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speechText = 'こんにちは世界。';
+        const speechText = 'アレクサ、赤ちゃん用品のおすすめの商品を教えてと声をかけてください。';
 
         return handlerInput.responseBuilder
             .speak(speechText)
             .getResponse();
     },
 };
+
+
+
+const RecommendIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'RecommendIntent';
+    },
+    handle(handlerInput) {
+        const speechText = 'おすすめの商品は大好きぎゅっぎゅっです。';
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .getResponse();
+    },
+};
+
+
 
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
@@ -39,7 +54,7 @@ const CancelAndStopIntentHandler = {
                 || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
-        const speechText = 'さようなら';
+        const speechText = 'バイバーイ';
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -76,10 +91,10 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
+        HelpHandler,
+        RecommendIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler
     )
     .addErrorHandlers(ErrorHandler)
     .lambda();
-
